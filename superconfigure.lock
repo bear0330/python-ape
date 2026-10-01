@@ -1,0 +1,7 @@
+# Public superconfigure release verified as the base for this overlay.
+superconfigure_repository=https://github.com/ahgamut/superconfigure.git
+superconfigure_ref=z0.0.66
+superconfigure_commit=29009f53a141be8113e7f5729a0a007f1081df58
+target=lang/python
+artifacts=results/bin/python.com
+cpython=3.12.3

@@ -1,0 +1,7 @@
+# Generated only by superconfigure; never commit build results.
+results/
+o/
+cosmos/
+superconfigure/
+__pycache__/
+*.pyc

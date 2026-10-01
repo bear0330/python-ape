@@ -77,7 +77,6 @@ resolution, and ordinary TCP sockets.
 Start something on port 8000, then open the tunnel:
 
 ```sh
-ulimit -s unlimited
 ./results/bin/python.com -m http.server --bind 127.0.0.1 8000
 ./results/bin/python.com examples/bore/Bore.py 8000 -t bore.pub
 ```

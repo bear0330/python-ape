@@ -66,6 +66,26 @@ results/bin/python.com
 The standard library is packed inside the executable. Imports are resolved
 from `/zip`.
 
+## Example
+
+[`examples/bore/Bore.py`](examples/bore/Bore.py) is a bore tunnel client
+extracted from [FastFileLink (ffl)](https://github.com/nuwainfo/ffl). It
+connects to a bore server, accepts incoming tunnel connections, and forwards
+them to a local TCP service. That exercises `getsockname`, `localhost`
+resolution, and ordinary TCP sockets. 
+
+Start something on port 8000, then open the tunnel:
+
+```sh
+ulimit -s unlimited
+./results/bin/python.com -m http.server --bind 127.0.0.1 8000
+./results/bin/python.com examples/bore/Bore.py 8000 -t bore.pub
+```
+
+The client prints a public endpoint such as `bore.pub:36168`. Pass `-s` or
+set `BORE_SECRET` when the server requires authentication. `--use-https`
+connects on port 443.
+
 ## Improvements
 
 `python.com` from this overlay has the following socket behavior.

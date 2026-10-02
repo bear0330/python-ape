@@ -55,6 +55,59 @@ The build writes:
 results/bin/python.com
 ```
 
+A finished build can also be packed as a link SDK. `python.com` stays the
+runtime for pure-Python programs. `package-sdk.sh` joins `libpython` with
+ssl, crypto, sqlite, ncurses, and the other libraries it was linked against
+into one `libpython-runtime.a` per architecture. Linking an application then
+adds only that archive and the extension `.a` files.
+
+`sdk/link.json` records the cosmos prefix compiled into those archives, plus
+paths inside the SDK. It does not record `cosmocc`. Extension builds and
+relinks take the superconfigure checkout, the same way `install-overlay.sh`
+does: pass the directory, or rely on `superconfigure/` beside the SDK after
+`./scripts/install-overlay.sh`. That checkout has to contain `cosmopolitan/`
+(`setup` and `cosmo` produce it).
+
+```sh
+./scripts/package-sdk.sh
+./scripts/build-extension.sh markupsafe
+./scripts/build-extension.sh crc32c
+```
+
+[`scripts/build-extension.sh`](scripts/build-extension.sh) builds every C
+extension. An extension name resolves under `extensions/`. The SDK defaults
+to `./sdk` and the checkout defaults to `./superconfigure`. Pass either
+path when it lives somewhere else.
+
+`extensions/markupsafe` is the usual third-party package. Its
+[`BUILD.mk`](extensions/markupsafe/BUILD.mk) calls superconfigure's
+`DOWNLOAD_SOURCE`. The shared script links the extension into that checkout
+for the duration of `make`, and the stock rules download the MarkupSafe
+3.0.3 tarball, check
+[`check.signature`](extensions/markupsafe/check.signature), extract it, and
+apply [`minimal.diff`](extensions/markupsafe/minimal.diff) with `patch -p0`.
+The diff renames the C module to the builtin `_markupsafe__speedups` and
+points the Python import at that name. The build then splits the tree into
+two parts. `native/` is the C file compiled for x86_64 and aarch64.
+`python/markupsafe` is the package packed into `Lib/site-packages`.
+`tests/try.py` is a unittest for that builtin. MarkupSafe itself is
+BSD-3-Clause and is downloaded at build time.
+
+`extensions/crc32c` is the same kind of package. The recipe downloads
+crc32c 2.7.1, checks it, and applies `minimal.diff` so the package imports
+the builtin `_crc32c`. `native/` holds the six C files compiled into
+`lib_crc32c.a`. `python/crc32c` is the package packed into
+`Lib/site-packages`. `tests/try.py` is a unittest for that builtin.
+crc32c is LGPL-2.1-or-later and is downloaded at build time.
+
+An extension without `BUILD.mk` is compiled from the `sources` and
+`defines` listed in `extension.json`.
+
+`package-sdk.sh` only copies archives and headers out of a build that has
+already completed. With no arguments it reads `./superconfigure` and writes
+`./sdk`. Pass the checkout when the build tree lives elsewhere, and a
+second path when the SDK should be copied somewhere else.
+
 ## Use
 
 ```sh

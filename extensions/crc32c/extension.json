@@ -1,0 +1,9 @@
+{
+  "module": "_crc32c",
+  "init": "PyInit__crc32c",
+  "python": "python/crc32c",
+  "archives": {
+    "x86_64": "native/x86_64/lib_crc32c.a",
+    "aarch64": "native/aarch64/lib_crc32c.a"
+  }
+}

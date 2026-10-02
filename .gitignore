@@ -3,5 +3,12 @@ results/
 o/
 cosmos/
 superconfigure/
+sdk/
+extensions/markupsafe/o/
+extensions/markupsafe/native/
+extensions/markupsafe/python/
+extensions/crc32c/o/
+extensions/crc32c/native/
+extensions/crc32c/python/
 __pycache__/
 *.pyc

@@ -1,0 +1,9 @@
+{
+  "module": "_markupsafe__speedups",
+  "init": "PyInit__markupsafe__speedups",
+  "python": "python/markupsafe",
+  "archives": {
+    "x86_64": "native/x86_64/lib_markupsafe__speedups.a",
+    "aarch64": "native/aarch64/lib_markupsafe__speedups.a"
+  }
+}

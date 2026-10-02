@@ -1,0 +1,37 @@
+Flatten MarkupSafe's speedups module so it can be linked as a CPython builtin.
+
+makesetup rejects a dotted name such as markupsafe._speedups. The static
+module is _markupsafe__speedups, and the package imports that name.
+
+MarkupSafe 3.0.3. Apply with `patch -p0 -i minimal.diff` from the directory
+that contains the extracted markupsafe-3.0.3 tree.
+--- markupsafe-3.0.3/src/markupsafe/__init__.py
++++ markupsafe-3.0.3/src/markupsafe/__init__.py
+@@ -5,7 +5,7 @@
+ import typing as t
+ 
+ try:
+-    from ._speedups import _escape_inner
++    from _markupsafe__speedups import _escape_inner
+ except ImportError:
+     from ._native import _escape_inner
+ 
+--- markupsafe-3.0.3/src/markupsafe/_speedups.c
++++ markupsafe-3.0.3/src/markupsafe/_speedups.c
+@@ -187,14 +187,14 @@
+ 
+ static struct PyModuleDef module_definition = {
+ 	.m_base = PyModuleDef_HEAD_INIT,
+-	.m_name = "markupsafe._speedups",
++	.m_name = "_markupsafe__speedups",
+ 	.m_size = 0,
+ 	.m_methods = module_methods,
+ 	.m_slots = module_slots,
+ };
+ 
+ PyMODINIT_FUNC
+-PyInit__speedups(void)
++PyInit__markupsafe__speedups(void)
+ {
+ 	return PyModuleDef_Init(&module_definition);
+ }
